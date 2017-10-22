@@ -4,7 +4,6 @@ library(networkD3)
 
 # full data
 seoul_full<-read.csv(file.choose())
-head(seoul_full)
 
 # what kind of artworks
 hist(as.numeric(as.character(seoul_full$수집년도)))
@@ -13,7 +12,6 @@ ggplot(seoul_full, aes(x=작품분류명)) + geom_bar()
 
 # when they collect
 ggplot(seoul_full, aes(x=수집년도)) + geom_histogram(bins = 30)
-
 ggplot(seoul_full, aes(x=수집년도, fill=작품분류명, color=작품분류명)) +
   geom_histogram(bins = 30) + facet_grid(. ~ 작품분류명)
 
@@ -25,11 +23,9 @@ ggplot(seoul_full, aes(x=수집년도, fill=소장처분류명, color=소장처�
 temp_seoul_full <- subset(seoul_full,제작년도!=c('년도미상'))
 temp_seoul_full <- subset(temp_seoul_full,nchar(as.character(제작년도))<=4) 
 temp_seoul_full <- subset(temp_seoul_full,제작년도!=c('연도미상')) 
-
-subset(seoul_full,nchar(as.character(제작년도))>4) %>% group_by(제작년도) %>% summarise(cnt=n()) %>% arrange(-cnt)
-
-temp_seoul_full$제작년도
 ggplot(temp_seoul_full, aes(x=as.numeric(as.character(제작년도)))) + geom_histogram(bins = 30)
+
+# subset(seoul_full,nchar(as.character(제작년도))>4) %>% group_by(제작년도) %>% summarise(cnt=n()) %>% arrange(-cnt)
 
 with(temp_seoul_full, plot(as.numeric(as.character(제작년도)), as.numeric(as.character(수집년도))))
 qplot(as.numeric(as.character(수집년도)), as.numeric(as.character(제작년도)), data=temp_seoul_full) + facet_grid(. ~ 작품분류명)
@@ -83,7 +79,6 @@ name <- data.frame(gd3$nodes$name)
 names(name)[1]<-'value'
 name<- left_join(name, art_tools_top_group, c('value'))
 
-gd3$nodes$name
 gd3$nodes$group <- name$작품분류명
 
 forceNetwork(Links = gd3$links, Nodes = gd3$nodes, Value = "value",
@@ -158,4 +153,3 @@ forceNetwork(Links = gd3_00$links, Nodes = gd3_00$nodes, Value = "value",
 forceNetwork(Links = gd3_10$links, Nodes = gd3_10$nodes, Value = "value",
              Source = 'source', Target = 'target', 
              NodeID = 'name', Group = 'group', fontSize = 16, zoom=T, legend = T, fontFamily = "Arial", opacityNoHover=T)
-
